@@ -12,58 +12,46 @@ struct ListNode {
 int main()
 {
 	ListNode* l1;
-	ListNode temp1(2);
-	ListNode temp2(4);
-	ListNode temp3(3);
+	ListNode temp1(5);
 	l1 = &temp1;
-	l1->next = &temp2;
-	temp2.next = &temp3;
 	ListNode* l2;
 	ListNode temp4(5);
-	ListNode temp5(6);
-	ListNode temp6(4);
 	l2 = &temp4;
-	l2->next = &temp5;
-	temp5.next = &temp6;
 	ListNode start(-1);
 	ListNode* temp = &start;
-	ListNode* sl1 = l1;
-	while (sl1) {
-		if (l2) {
-			ListNode node(sl1->val + l2->val);
-			if (temp->val == -1) {
-				start = node;
-			}
-			else {
-				temp->next = &node;
-				temp = temp->next;
-			}
+	int carry = 0;
+	while (l1) {
+		if (l2) {		
+			int x = l1->val + l2->val + carry;
+			carry = x / 10;
+			temp->next = new ListNode(x%10);
+			temp = temp->next;
 			l2 = l2->next;
-			sl1 = sl1->next;
+			l1 = l1->next;
 		}
 		else {
-			ListNode node2(sl1->val);
-			if (start.val == -1) {
-				start = node2;
-			}
-			else {
-				temp->next = &node2;
-				temp = temp->next;
-			}
-			sl1 = sl1->next;
+			int x = l1->val + carry;
+			carry = x / 10;
+			temp->next = new ListNode(x % 10);
+			temp = temp->next;
+			l1 = l1->next;
 		}
 	}
 
 	while (l2) {
-		ListNode node3(l2->val);
-		if (start.val == -1) {
-			start = node3;
-		}
-		else {
-			temp->next = &node3;
-			temp = temp->next;
-		}
+		int x = l2->val + carry;
+		carry = x / 10;
+		temp->next = new ListNode(x%10);
+		temp = temp->next;
 		l2 = l2->next;
+	}
+	if (carry != 0) {
+		temp->next = new ListNode(carry);
+	}
+	ListNode* pr = start.next;
+	while (pr) {
+		cout << pr->val << endl;
+		pr = pr->next;
 	}
 	system("pause");
 }
